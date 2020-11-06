@@ -9,4 +9,22 @@ const moviesMock = [{"id":"36e285b9-9451-4623-9e71-36d367ef9d54","title":"Hamlet
 {"id":"4d0480d6-9378-492b-97d7-950d3521a761","title":"To the Sea (Alamar)","year":2008,"cover":"http://dummyimage.com/172x135.png/ff4444/ffffff","description":"Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.\n\nCurabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.\n\nInteger tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.","duration":2039,"contentRating":"G","source":"https://yellowpages.com/potenti/in.html?lacus=ultrices&morbi=phasellus&sem=id&mauris=sapien&laoreet=in&ut=sapien&rhoncus=iaculis&aliquet=congue&pulvinar=vivamus&sed=metus&nisl=arcu&nunc=adipiscing&rhoncus=molestie&dui=hendrerit&vel=at&sem=vulputate&sed=vitae&sagittis=nisl&nam=aenean&congue=lectus&risus=pellentesque&semper=eget&porta=nunc&volutpat=donec&quam=quis&pede=orci&lobortis=eget&ligula=orci&sit=vehicula&amet=condimentum&eleifend=curabitur&pede=in&libero=libero&quis=ut&orci=massa&nullam=volutpat&molestie=convallis&nibh=morbi&in=odio&lectus=odio&pellentesque=elementum&at=eu&nulla=interdum&suspendisse=eu&potenti=tincidunt&cras=in&in=leo&purus=maecenas&eu=pulvinar&magna=lobortis&vulputate=est&luctus=phasellus&cum=sit&sociis=amet&natoque=erat&penatibus=nulla&et=tempus&magnis=vivamus&dis=in&parturient=felis&montes=eu&nascetur=sapien&ridiculus=cursus&mus=vestibulum&vivamus=proin&vestibulum=eu&sagittis=mi&sapien=nulla&cum=ac&sociis=enim&natoque=in&penatibus=tempor&et=turpis&magnis=nec&dis=euismod&parturient=scelerisque&montes=quam&nascetur=turpis&ridiculus=adipiscing&mus=lorem&etiam=vitae&vel=mattis&augue=nibh&vestibulum=ligula&rutrum=nec&rutrum=sem&neque=duis&aenean=aliquam","tags":["Comedy|Romance"]},
 {"id":"4dbb4ac4-0a59-4647-a5a7-8c128a2870b2","title":"Amazing Adventure, The (a.k.a. The Amazing Quest of Ernest Bliss)","year":2012,"cover":"http://dummyimage.com/209x155.png/5fa2dd/ffffff","description":"Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.","duration":2015,"contentRating":"PG-13","source":"https://jalbum.net/eu/mi/nulla/ac/enim/in.jpg?aenean=integer&lectus=pede&pellentesque=justo&eget=lacinia&nunc=eget&donec=tincidunt&quis=eget&orci=tempus&eget=vel&orci=pede&vehicula=morbi&condimentum=porttitor&curabitur=lorem&in=id&libero=ligula&ut=suspendisse&massa=ornare&volutpat=consequat&convallis=lectus&morbi=in&odio=est&odio=risus&elementum=auctor&eu=sed&interdum=tristique&eu=in&tincidunt=tempus&in=sit&leo=amet&maecenas=sem&pulvinar=fusce&lobortis=consequat&est=nulla&phasellus=nisl&sit=nunc&amet=nisl&erat=duis&nulla=bibendum&tempus=felis&vivamus=sed&in=interdum&felis=venenatis&eu=turpis&sapien=enim&cursus=blandit&vestibulum=mi&proin=in&eu=porttitor&mi=pede&nulla=justo&ac=eu&enim=massa&in=donec&tempor=dapibus&turpis=duis&nec=at&euismod=velit&scelerisque=eu&quam=est&turpis=congue&adipiscing=elementum&lorem=in&vitae=hac&mattis=habitasse&nibh=platea&ligula=dictumst&nec=morbi&sem=vestibulum&duis=velit&aliquam=id&convallis=pretium&nunc=iaculis&proin=diam&at=erat&turpis=fermentum&a=justo&pede=nec&posuere=condimentum&nonummy=neque&integer=sapien&non=placerat&velit=ante&donec=nulla&diam=justo&neque=aliquam&vestibulum=quis&eget=turpis&vulputate=eget&ut=elit&ultrices=sodales","tags":["Drama|War","Comedy","Documentary|Mystery","Drama|Film-Noir"]}];
 
-module.exports = { moviesMock };
+function filteredMovieMocks(tag) {
+  return moviesMock.filter(movie => movie.tags.includes(tag));
+}
+
+class MoviesServiceMock {
+  async getMovies() {
+    return Promise.resolve(moviesMock);
+  }
+
+  async createMovie() {
+    return Promise.resolve(moviesMock[0]);
+  }
+}
+
+module.exports = {
+  moviesMock,
+  filteredMovieMocks,
+  MoviesServiceMock
+ };

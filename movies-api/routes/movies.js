@@ -1,9 +1,20 @@
 const express = require('express');
 const MoviesService = require('../services/movies');
 
+// definimos los schemas que queremos validar
+const {
+  movieIdSchema,
+  createMovieSchema,
+  updateMovieSchema
+} = require('../utils/schemas/movies');
+
+// Middleware que lleva acabo la validacion de los schemes
+const validationHandler = require('../utils/middleware/validationHandler');
+
 function moviesApi(app) {
+  
   const router = express.Router();
-  app.use('/api/movies', router);
+  app.use('/api/movies', router); // define el endpoint principal de la api eje: http://localhost:3000/api/movies
 
   const moviesService = new MoviesService();
 
@@ -15,7 +26,9 @@ function moviesApi(app) {
     const { tags } = req.query; // se concantena con ?
 
     try {
-      const movies = await moviesService.getMovies({ tags }); 
+      const movies = await moviesService.getMovies({ tags });
+
+    //   throw new Error('Error getting movies');
 
       res.status(200).json({
         data: movies,
@@ -29,7 +42,7 @@ function moviesApi(app) {
   /**
    * Route GET para obtener una sola pelicula por ID
    */
-  router.get('/:movieId', async function(req, res, next) {
+  router.get('/:movieId', validationHandler({ movieId: movieIdSchema }, 'params'), async function(req, res, next) {
 
       const { movieId } = req.params; // en la url
 
@@ -48,7 +61,7 @@ function moviesApi(app) {
   /**
    * Route POST para crear una nueva pelicula pasandole un json en el request
    */
-  router.post('/', async function(req, res, next) {
+  router.post('/', validationHandler(createMovieSchema), async function(req, res, next) {
 
       const { body: movie } = req;
 
@@ -67,7 +80,7 @@ function moviesApi(app) {
   /**
    * Route PUT para modificar una pelicula pasandole la id
    */
-  router.put('/:movieId', async function(req, res, next) {
+  router.put('/:movieId', validationHandler({ movieId: movieIdSchema }, 'params'), validationHandler(updateMovieSchema), async function(req, res, next) {
 
       const { movieId } = req.params; // en la url
       const { body: movie } = req;
@@ -87,7 +100,7 @@ function moviesApi(app) {
   /**
    * Route DELETE para eliminar una peliculando pasandole un ID
    */
-  router.delete('/:movieId', async function(req, res, next) {
+  router.delete('/:movieId', validationHandler({ movieId: movieIdSchema }, 'params'), async function(req, res, next) {
 
       const { movieId } = req.params; // en la url
 
