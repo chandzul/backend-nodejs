@@ -11,6 +11,9 @@ const {
 // Middleware que lleva acabo la validacion de los schemes
 const validationHandler = require('../utils/middleware/validationHandler');
 
+const cacheResponse = require('../utils/cacheResponse')
+const { FIVE_MINUTES_IN_SECONDS, SIXTY_MINUTES_IN_SECONDS }= require('../utils/time')
+
 function moviesApi(app) {
   
   const router = express.Router();
@@ -22,6 +25,9 @@ function moviesApi(app) {
    * Route GET para obtner toda la lista de peliculas
    */
   router.get('/', async function(req, res, next) {
+
+    // agregamos cache
+    cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
 
     const { tags } = req.query; // se concantena con ?
 
@@ -44,18 +50,21 @@ function moviesApi(app) {
    */
   router.get('/:movieId', validationHandler({ movieId: movieIdSchema }, 'params'), async function(req, res, next) {
 
-      const { movieId } = req.params; // en la url
+    // agregamos cache
+    cacheResponse(res, SIXTY_MINUTES_IN_SECONDS);
 
-      try {
-          const movies = await moviesService.getMovie({ movieId });
+    const { movieId } = req.params; // en la url
 
-          res.status(200).json({
-              data: movies,
-              message: 'movie retrieved'
-          });
-      } catch (error) {
-          next(error);
-      }
+    try {
+      const movies = await moviesService.getMovie({ movieId });
+
+      res.status(200).json({
+        data: movies,
+        message: 'movie retrieved'
+      });
+    } catch (error) {
+        next(error);
+    }
   });
 
   /**
